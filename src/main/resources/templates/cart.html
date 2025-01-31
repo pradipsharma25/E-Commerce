@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Cart</title>
+    <!-- Load Bootstrap and Custom CSS -->
+    <link th:href="@{/webjars/bootstrap/5.3.0/css/bootstrap.min.css}" rel="stylesheet">
+    <link th:href="@{/css/style.css}" rel="stylesheet">
+</head>
+<body>
+    <!-- Insert Navbar Fragment -->
+    <div th:replace="~{fragments/navbar}"></div>
+
+    <div class="container mt-4 fade-in">
+        <h2>My Cart</h2>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Product</th>
+                    <th>Price</th>
+                    <th>Quantity</th>
+                    <th>Total</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="item : ${cartItems}">
+                    <td th:text="${item.product.name}"></td>
+                    <td th:text="'$' + ${item.product.price}"></td>
+                    <td>
+                        <form th:action="@{/cart/update/{id}(id=${item.id})}" method="post">
+                            <input type="number" name="quantity" th:value="${item.quantity}" min="1" class="form-control"/>
+                            <button type="submit" class="btn btn-sm btn-info">Update</button>
+                        </form>
+                    </td>
+                    <td th:text="'$' + ${item.quantity * item.product.price}"></td>
+                    <td>
+                        <form th:action="@{/cart/remove/{id}(id=${item.id})}" method="post">
+                            <button type="submit" class="btn btn-sm btn-danger">Remove</button>
+                        </form>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Load Bootstrap JS -->
+    <script th:src="@{/webjars/bootstrap/5.3.0/js/bootstrap.bundle.min.js}"></script>
+</body>
+</html>
